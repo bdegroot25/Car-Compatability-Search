@@ -2,6 +2,12 @@ import streamlit as st
 import pandas as pd
 import re
 
+# Model aliases mapping (lowercase keys)
+model_aliases = {
+    'E46': '3 Series',
+    # Add more aliases here as needed
+}
+
 @st.cache_data
 def load_data():
     file_path = r"Car Database.csv"
@@ -37,6 +43,14 @@ def find_phrase_keywords(text, keywords):
             matches.append(kw)
     return matches
 
+def map_alias_to_model(text, aliases):
+    text_lower = text.lower()
+    matched_models = []
+    for alias, model in aliases.items():
+        if alias in text_lower:
+            matched_models.append(model)
+    return matched_models
+
 def extract_years(text):
     matches = re.findall(r'(\d{2,4})-(\d{2,4})', text)
     if matches:
@@ -63,7 +77,9 @@ def main():
     if search_text:
         start_year, end_year = extract_years(search_text)
         matched_makes = find_phrase_keywords(search_text, unique_makes)
-        matched_models = find_phrase_keywords(search_text, unique_models)
+        alias_matched_models = map_alias_to_model(search_text, model_aliases)
+        exact_matched_models = find_phrase_keywords(search_text, unique_models)
+        matched_models = list(set(alias_matched_models + exact_matched_models))
         matched_variants = find_phrase_keywords(search_text, unique_variants)
 
         st.write(f"Detected Start Year: {start_year if start_year else 'None'}, End Year: {end_year if end_year else 'None'}")
