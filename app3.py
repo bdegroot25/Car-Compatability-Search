@@ -4,7 +4,7 @@ import re
 
 @st.cache_data
 def load_data():
-    file_path = r"C:\Users\BarneyDeGroot\OneDrive - Praesto Consulting Group\Documents\Training\Excel\Car Database.csv"
+    file_path = r"Car Database.csv"
     df = pd.read_csv(file_path, encoding='latin1')
     
     def extract_years(text):
