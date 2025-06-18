@@ -10,7 +10,7 @@ model_aliases = {
 
 @st.cache_data
 def load_data():
-    file_path = r"Car Database 25.xlsx"
+    file_path = r"Car Database 25.csv"
     df = pd.read_csv(file_path, encoding='latin1')
     
     def extract_years(text):
